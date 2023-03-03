@@ -1,53 +1,77 @@
 let eventBus = new Vue()
 
+Vue.component('columns', {
+    props:{
+
+    },
+    template:`
+    <div id="cols">
+        <fill></fill>
+        <p v-if="errors.length"
+        v-for="error in errors">
+            {{ error }}
+        </p>
+        <div class="col">
+            <h2>Выполняй скорее</h2>
+            <card></card>
+        </div>
+        <div class="col">
+            <h2>Осталось совсем чуть чуть</h2>
+        </div>
+        <div class="col">
+            <h2>Всё выполнено, молодец!</h2>
+        </div>
+    </div>
+    `,
+    data() {
+        return {
+            col1:[],
+            col2:[],
+            col3:[],
+            errors:[],
+            count:[],
+        }
+    },
+    methods:{
+
+    },
+
+})
+
 Vue.component('fill', {
+    props: {
+
+    },
     template: `
-    <form @submit.prevent="onSubmit">
-        <p> 
-            <b>Title</b>
-            <label>
-            <input type="text" v-model="title" placeholder="title">
-            </label>
-        </p>
-        <p>
-            <label>
-            <input type="checkbox" >
-            <input type="text" v-model="t1" placeholder="subtask"> 
-            </label>
-        </p>
-        
-        <p>
-            <label>
-            <input type="checkbox" >
-            <input type="text" v-model="t2" placeholder="subtask">
-            </label>
-        </p>
-            
-        <p>
-            <label>
-            <input type="checkbox"  >
-            <input type="text" v-model="t3" placeholder="subtask">
-            </label>
-        </p>
-            
-        <p>
-            <label>
-            <input type="checkbox" >
-            <input type="text" v-model="t4" placeholder="subtask">
-            </label>
-        </p>
-            
-        <p>
-            <label>
-            <input type="checkbox" >
-            <input type="text" v-model="t5" placeholder="subtask">
-            </label>
-        </p>
-        
-        <p>
-            <input type="submit" value="Add a card">
-        </p>
-    </form>
+    <div>
+        <form @submit.prevent="onSubmit">
+            <p> 
+                <b>Заголовок</b>
+                <input required type="text" v-model="title" placeholder="Напиши тут">
+            </p>
+            <ul>
+                <li>
+                    <input required type="text" v-model="t1" placeholder="Заметочка"> 
+                </li>
+                <li>
+                    <input required type="text" v-model="t2" placeholder="Заметочка">
+                </li>
+                <li>
+                    <input required type="text" v-model="t3" placeholder="Заметочка">
+                </li>
+                <li>
+                    <input type="text" v-model="t4" placeholder="Заметочка">
+                </li>
+                <li >
+                    <input type="text" v-model="t5" placeholder="Заметочка">
+                </li>
+                <p>
+                    <input type="submit" value="Добавить">
+                </p>
+            </ul>
+        </form>
+                   
+    </div>
     `,
     data() {
         return{
@@ -63,7 +87,11 @@ Vue.component('fill', {
         onSubmit(){
             let card = {
                 title: this.title,
-                t: [this.t1, this.t2, this.t3, this.t4, this.t5,]
+                tasks: [{text: this.t1, completed: false},
+                    {text: this.t2, completed: false},
+                    {text: this.t3, completed: false},
+                    {text: this.t4, completed: false},
+                    {text: this.t5, completed: false}]
             }
             eventBus.$emit('card-submitted', card)
             this.title = null
@@ -72,56 +100,45 @@ Vue.component('fill', {
             this.t3 = null
             this.t4 = null
             this.t5 = null
-            console.log(card)
-        }
-    }
+    },
+}
 })
-
-Vue.component('columns', {
-    props:{
-        card: {
-            title: {
-                type: Text,
-                required: true
+    Vue.component('card', {
+        props:{
+            card: {
+                title: {
+                    type: Text,
+                    required: true
+                },
+                    tasks: {
+                        type: Array,
+                        required: true,
+                    }
+                },
             },
-            t: {
-                type: Array,
-                required: true,
-            }
-        },
-    },
-    template:`
-        <div id="cols">
-    <fill></fill>
-<div class="col">
+            template:`
+        <div class="card">
+             <p><b>Title: </b>{{ card.title }}</p>
+             <label v-for="task in tasks"
+                    v-if="task.text != null">
+                    <p :class="{ completed:task.completed }">
+                    <input type="checkbox" @click="task.completed" :disabled="task.completed">
+                         {{ task.text }}
+                    </p>
+             </label>
+        </div>
+    `,
+            data() {
+                return {
+                    }
+                },
+                    methods:{
+             }
+})
 
-</div>
-<div class="col">{{ col2 }}</div>
-<div class="col">{{ col3 }}</div>
-</div>
-`,
-    data() {
-        return {
-            col1:[0],
-            col2:[123],
-            col3:[66]
+
+    let app = new Vue({
+        el:'#app',
+        data: {
         }
-    },
-    methods:{
-
-    },
-    mounted() {
-        eventBus.$on('card-submitted', card => {
-            this.col1.push(card)
-
-        })
-    }
-})
-
-let app = new Vue({
-    el:'#app',
-    data: {
-
-    }
-
-})
+    })

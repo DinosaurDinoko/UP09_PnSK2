@@ -1,9 +1,74 @@
+#app{
+    text-align: center;
+
+}
+
+body {
+
+    background-color: #A9AC5D;
+    font-family: "Nirmala UI";
+
+}
+
+
+h1 {
+    text-align: center;
+}
+
+.addform{
+    height: 200px;
+    width: 300px;
+    font-size: 28px;
+
+}
+
+.tasks{
+    display: flex;
+    list-style-type: disc;
+    margin: 0px;
+    align-items: center;
+}
+
+.completed{
+    text-decoration: line-through;
+}
+
+.error{
+    position: fixed;
+    top: 400px;
+    color: red;
+    width: 200px;
+
+}
+
+
+.cards{
+    list-style-type: none;
+    font-size: 14px;
+    width: 96%;
+    background-color: rgb(86, 91, 124);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+p{
+    margin: 5px;
+
+}
+
 #cols {
     display: flex;
 }
 
 .col {
-    width: 33.33%;
-    height: 850px;
-    text-align: center;
+    width: 25%;
+    margin-right: 15px;
+    height: 800px;
+    text-align: c;
+    background-color: #E8E1DB;
+
 }
