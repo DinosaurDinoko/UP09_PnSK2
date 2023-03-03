@@ -29,6 +29,7 @@ Vue.component('columns', {
             this.errors = []
             if (this.column1.length < 3) {
                 this.column1.push(card)
+                console.log()
             } else {
                 this.errors.push('You can\'t add new cards now')
             }
@@ -118,7 +119,7 @@ methods:{
                 {text: this.t3, completed: false},
                 {text: this.t4, completed: false},
                 {text: this.t5, completed: false}],
-            date: null,
+            date: new Date().toLocaleString(),
             status: 0,
         }
         eventBus.$emit('card-submitted', card)
@@ -128,6 +129,7 @@ methods:{
         this.t3 = null
         this.t4 = null
         this.t5 = null
+        this.date = null
 },
 }
 })
@@ -159,6 +161,7 @@ Vue.component('col1', {
                     {{ task.text }}
                     </li>
                  </ul>
+                  <p class="font"><b>Дата и время создания: </b><br>{{ card.date }}</p>
             </div>
         </div>
     `,
@@ -199,6 +202,7 @@ Vue.component('col1', {
             }
 
             if (card.status / length * 100 === 100){
+                card.date = new Date().toLocaleString()
                 eventBus.$emit('to-column1-3', card)
             }
         },
@@ -278,7 +282,7 @@ Vue.component('col3', {
                     {{ task.text }}
                     </li>
                  </ul>
-                 <p><b>День, время: </b>{{ card.date }}</p>
+                <p class="font"><b>Дата, время:</b>{{ card.date }}</p>      
             </div>
         </div>
     `,
