@@ -7,35 +7,36 @@ Vue.component('columns', {
     template:`
     <div id="cols">
         <fill></fill>
-        <p v-if="errors.length"
-        v-for="error in errors">
-            {{ error }}
-        </p>
-        <div class="col">
-            <h2>Выполняй скорее</h2>
-            <card></card>
-        </div>
-        <div class="col">
+        <!--        <p v-if="errors.length"-->
+<!--        v-for="error in errors">-->
+<!--            {{ error }}-->
+<!--        </p>-->
+        <col1 class="col" :column1="column1"></col1>
+        <col2 class="col" :column2="column2">
             <h2>Осталось совсем чуть чуть</h2>
-        </div>
-        <div class="col">
+        </col2>
+        <col3 class="col" :column3="column3">
             <h2>Всё выполнено, молодец!</h2>
-        </div>
+        </col3>
     </div>
     `,
     data() {
         return {
-            col1:[],
-            col2:[],
-            col3:[],
             errors:[],
-            count:[],
+            column1:[],
+            column2:[],
+            column3:[],
         }
     },
     methods:{
 
     },
-
+    mounted(){
+        eventBus.$on('card-submitted', card =>{
+            this.column1.push(card)
+            console.log(this.column1)
+        })
+    }
 })
 
 Vue.component('fill', {
@@ -100,11 +101,16 @@ Vue.component('fill', {
             this.t3 = null
             this.t4 = null
             this.t5 = null
+            console.log(card)
     },
 }
 })
-    Vue.component('card', {
+    Vue.component('col1', {
         props:{
+            column1:{
+                type: Array,
+                required: true
+            },
             card: {
                 title: {
                     type: Text,
@@ -116,29 +122,39 @@ Vue.component('fill', {
                     }
                 },
             },
-            template:`
-        <div class="card">
-            <p v-for=""><b>Title: </b>{{ card.title }}</p> 
-             <label v-for="task in tasks"
+            template:`        
+        <div>
+            <h2>Выполняй скорее</h2>
+            <div v-for="card in column1">
+                <p ><b>Title: </b>{{ card.title }}</p>
+                <label v-for="task in card.tasks"
                     v-if="task.text != null">
                     <p :class="{ completed:task.completed }">
-                    <input type="checkbox" @click="task.completed" :disabled="task.completed">
-                         {{ task.text }}
+                   <input type="checkbox" @click="task.completed = true" :disabled="task.completed">
+                             {{ task.text }}
                     </p>
              </label>
         </div>
     `,
-            data() {
-                return {
-                    column1:[],
-                    }
-                },
-        mounted() {
-            eventBus.$on('card-submitted', card => {
-                this.column1.push(card)
-                console.log(this.column1)
-            })
+        methods:{
         }
+    })
+Vue.component('col2', {
+    props:{
+
+    },
+    template:`
+    
+    `,
+})
+
+Vue.component('col3', {
+    props:{
+
+    },
+    template:`
+    
+    `,
 })
 
 
